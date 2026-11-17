@@ -1,0 +1,26 @@
+{
+  "version": 1,
+  "publishedSite": {
+    "hosting": {
+      "provider": "cloudflare",
+      "accountId": "2ea89f9a5431d097dd741181dff89006",
+      "project": "acre-site",
+      "branch": "main",
+      "directory": "dist"
+    },
+    "source": "manual",
+    "url": "https://metodoacre.com"
+  },
+  "defaultTarget": "all",
+  "githubAccount": "",
+  "hosting": {
+    "provider": "cloudflare",
+    "accountId": "2ea89f9a5431d097dd741181dff89006",
+    "project": "acre-site",
+    "branch": "main",
+    "directory": "dist"
+  },
+  "buildScript": "build",
+  "beforePublish": [],
+  "afterPublish": []
+}
