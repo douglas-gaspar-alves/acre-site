@@ -1,0 +1,113 @@
+---
+import "@/styles/global.css";
+import BaseHead from "@/components/utility/BaseHead.astro";
+import SkipLink from "@/components/global/SkipLink.astro";
+import type { SeoProps } from "@/types";
+
+type Props = SeoProps;
+---
+
+<!doctype html>
+<html lang="pt-BR" class="theme-dark">
+  <head>
+    <BaseHead {...Astro.props} image="/brand/acre-dark.png" />
+    <script
+      defer
+      src="https://pepy.link/script.js"
+      data-website-id="82456144-eff7-4027-8c94-ea8b3061916b"
+    ></script>
+    <script
+      defer
+      src="https://pepy.link/recorder.js"
+      data-website-id="82456144-eff7-4027-8c94-ea8b3061916b"
+    ></script>
+    <meta name="theme-color" content="#101210" />
+    <link rel="icon" type="image/svg+xml" href="/brand/favicon.svg" />
+    <link
+      rel="preload"
+      href="/brand/metrophobic-regular.ttf"
+      as="font"
+      type="font/ttf"
+      crossorigin
+    />
+  </head>
+  <body class="campaign_wrap">
+    <SkipLink label="Pular para o conteúdo" />
+    <header class="campaign_header">
+      <a class="campaign_brand" href="/" aria-label="A.C.R.E. — início">
+        <img
+          src="/brand/acre-dark.png"
+          alt="A.C.R.E."
+          width="454"
+          height="120"
+        />
+      </a>
+    </header>
+    <main id="main" tabindex="-1">
+      <slot />
+    </main>
+    <footer class="campaign_footer">
+      <p>© {new Date().getFullYear()} A.C.R.E.</p>
+      <p>IA apoia. Você decide.</p>
+      <button
+        class="campaign_privacy"
+        type="button"
+        data-modal-open="cadastro-info"
+      >
+        Sobre o cadastro <span aria-hidden="true">↗</span>
+      </button>
+    </footer>
+  </body>
+</html>
+
+<style is:global>
+  @layer components {
+    .campaign_wrap {
+      background-image: radial-gradient(
+        ellipse at 50% 34%,
+        #24301b44,
+        transparent 58%
+      );
+      .campaign_header {
+        width: var(--site-width);
+        max-width: 80rem;
+        margin-inline: auto;
+        padding-block: var(--space-6);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: var(--space-4);
+      }
+      .campaign_brand {
+        width: 10rem;
+        flex-shrink: 0;
+      }
+      .campaign_footer {
+        width: var(--site-width);
+        max-width: 80rem;
+        margin-inline: auto;
+        padding-block: var(--space-4);
+        border-top: var(--border-width) solid #ffffff12;
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: space-between;
+        align-items: center;
+        gap: var(--space-4);
+        font-size: 0.875rem;
+        color: var(--text-2);
+      }
+      .campaign_privacy {
+        color: var(--text);
+      }
+      @media (width < 30rem) {
+        .campaign_brand {
+          width: 8rem;
+        }
+        .campaign_footer {
+          justify-content: center;
+          text-align: center;
+        }
+      }
+    }
+  }
+</style>

@@ -24,6 +24,16 @@ const { theme = "inherit", overlap = false, ...seo } = Astro.props;
 <html lang="en" class:list={[theme !== "inherit" && `theme-${theme}`]}>
   <head>
     <BaseHead {...seo} />
+    <script
+      defer
+      src="https://pepy.link/script.js"
+      data-website-id="82456144-eff7-4027-8c94-ea8b3061916b"
+    ></script>
+    <script
+      defer
+      src="https://pepy.link/recorder.js"
+      data-website-id="82456144-eff7-4027-8c94-ea8b3061916b"
+    ></script>
     <slot name="head" />
   </head>
   <body>

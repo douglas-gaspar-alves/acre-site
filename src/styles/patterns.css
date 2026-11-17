@@ -13,7 +13,7 @@
 }
 
 .section {
-  padding-top: var(--section-space-medium);
+  padding-top: var(--section-space-small);
   padding-bottom: var(--section-space-medium);
   background-color: var(--background);
   color: var(--text);
@@ -218,3 +218,4 @@
     opacity: 0.5;
   }
 }
+

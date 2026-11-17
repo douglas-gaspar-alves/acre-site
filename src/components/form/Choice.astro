@@ -190,9 +190,9 @@ const {
 
     /* Chip */
     .form-choice.chip {
-      padding: 0.75em 1.5em;
+      padding: 0.6em 0.85em;
       background-color: var(--background-2);
-      border: var(--border-width) solid transparent;
+      border: var(--border-width) solid var(--border);
       border-radius: var(--radius-round);
       transition:
         background-color var(--hover-duration) var(--hover-ease),
@@ -204,14 +204,20 @@ const {
         --_mark-chosen: var(--background);
         --_ink: var(--text);
       }
+      & .form-choice_dot {
+        width: 0.65em;
+        height: 0.65em;
+      }
       @media (hover: hover) {
         &:hover:not(:has(:checked)) {
           background-color: var(--background-3);
         }
       }
       &:has(:checked) {
-        background-color: var(--text);
-        color: var(--background);
+        background-color: var(--brand-500, var(--text));
+        border-color: var(--brand-500, var(--text));
+        color: var(--dark-900, var(--background));
+        font-weight: 600;
       }
       & .form-choice_input:focus-visible ~ .form-choice_mark {
         outline: 0;

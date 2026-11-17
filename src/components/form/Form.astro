@@ -7,8 +7,12 @@ interface Props extends HTMLAttributes<"form"> {
   render?: boolean;
   /** Form name. */
   name?: string;
+  /** Form spacing. */
+  variant?: "default" | "compact";
   /** Form endpoint. Omit to skip submission. */
   action?: string;
+  /** Destination after a successful submission. */
+  redirectUrl?: string;
   /** Message shown after submission. */
   successMessage?: string;
   /** Message shown after an error. */
@@ -18,7 +22,9 @@ interface Props extends HTMLAttributes<"form"> {
 const {
   render = true,
   name,
+  variant = "default",
   action,
+  redirectUrl,
   successMessage = "Thanks — we will be in touch.",
   errorMessage = "That did not send. Please try again.",
   method = "post",
@@ -31,9 +37,10 @@ const content = await slotContent(Astro.slots);
 
 {render && name && content && (
   <div
-    class:list={["form_wrap", className]}
+    class:list={["form_wrap", variant !== "default" && variant, className]}
     data-state="idle"
     data-endpoint={action}
+    data-redirect-url={redirectUrl}
   >
     <form
       class="form_fields"
@@ -63,6 +70,13 @@ const content = await slotContent(Astro.slots);
       'button:not([type]), button[type="submit"], input[type="submit"]',
     );
 
+    const updateSubmit = () => {
+      if (submit) submit.disabled = !fields.checkValidity();
+    };
+    fields.addEventListener("input", updateSubmit);
+    fields.addEventListener("change", updateSubmit);
+    updateSubmit();
+
     fields.addEventListener("submit", async (event) => {
       const endpoint = form.dataset.endpoint;
 
@@ -73,6 +87,7 @@ const content = await slotContent(Astro.slots);
       if (submit) submit.disabled = true;
 
       try {
+        if (!endpoint) throw new Error("Form endpoint is not configured");
         if (endpoint) {
           const answer = await fetch(endpoint, {
             method: fields.method || "post",
@@ -83,9 +98,13 @@ const content = await slotContent(Astro.slots);
         }
         form.dataset.state = "sent";
         fields.reset();
+        updateSubmit();
+        if (form.dataset.redirectUrl) {
+          window.location.assign(form.dataset.redirectUrl);
+        }
       } catch {
         form.dataset.state = "failed";
-        if (submit) submit.disabled = false;
+        updateSubmit();
       }
     });
   }
@@ -98,6 +117,9 @@ const content = await slotContent(Astro.slots);
       flex-direction: column;
       gap: var(--space-4);
       width: 100%;
+      &.compact .form_fields {
+        gap: 0.75rem;
+      }
     }
 
     .form_fields {

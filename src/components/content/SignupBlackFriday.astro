@@ -1,0 +1,274 @@
+---
+import Modal from "@/components/interactive/Modal.astro";
+import Form from "@/components/form/Form.astro";
+import Input from "@/components/form/Input.astro";
+import Select from "@/components/form/Select.astro";
+import Button from "@/components/Button.astro";
+import Heading from "@/components/typography/Heading.astro";
+import Paragraph from "@/components/typography/Paragraph.astro";
+import ContentWrapper from "@/components/wrapper/ContentWrapper.astro";
+
+interface Props {
+  /** Set to `false` to omit the component. */
+  render?: boolean;
+}
+const { render = true } = Astro.props;
+const endpoint =
+  import.meta.env.PUBLIC_LEAD_ENDPOINT ||
+  "https://webhook.douglasgaspar.com/webhook/backfriday-acre";
+const privacyUrl = import.meta.env.PUBLIC_PRIVACY_URL;
+const ready = Boolean(endpoint);
+---
+
+{render && (
+  <Modal
+    id="black-friday-cadastro"
+    label="Cadastro para a Black Friday A.C.R.E."
+  >
+    <div class="signup-black-friday_wrap">
+      <Form
+        name="black-friday-acre"
+        variant="compact"
+        action={ready ? endpoint : undefined}
+        redirectUrl="https://pepy.link/q/grupo-aviso-acre"
+        successMessage="Cadastro confirmado! Na quinta-feira, enviaremos a oferta e os dois bônus pelos canais que você escolheu."
+        errorMessage={
+          ready
+            ? "Não foi possível confirmar seu cadastro. Seus dados foram mantidos. Tente novamente."
+            : "O envio ainda não está disponível. Configure o webhook para concluir o cadastro."
+        }
+      >
+        <Input
+          label="Nome"
+          name="name"
+          placeholder="Como podemos chamar você?"
+          autocomplete="name"
+          maxlength={100}
+          minlength={2}
+          required
+        />
+        <Input
+          label="E-mail"
+          name="email"
+          variant="email"
+          placeholder="voce@suaagencia.com.br"
+          maxlength={254}
+          required
+        />
+        <Input
+          label="WhatsApp com DDD"
+          name="whatsapp"
+          variant="phone"
+          placeholder="(11) 99999-9999"
+          maxlength={15}
+          data-signup-whatsapp
+          required
+        />
+        <Select
+          label="Qual opção melhor descreve sua atuação?"
+          name="profile"
+          placeholder="Selecione sua atuação"
+          options={[
+            { value: "agency-owner", label: "Dono de agência" },
+            {
+              value: "marketing-professional",
+              label: "Profissional de marketing",
+            },
+            { value: "digital-entrepreneur", label: "Empreendedor digital" },
+            {
+              value: "local-business-owner",
+              label: "Empresário de negócio local",
+            },
+          ]}
+          required
+        />
+        <fieldset class="signup-black-friday_channels">
+          <legend class="signup-black-friday_legend">
+            Onde você prefere receber a oferta?
+          </legend>
+          <div class="signup-black-friday_options">
+            {[
+              { value: "whatsapp", label: "WhatsApp" },
+              { value: "email", label: "E-mail" },
+              { value: "both", label: "Ambos" },
+            ].map((channel) => (
+              <label class="signup-black-friday_option">
+                <input
+                  type="radio"
+                  name="delivery_channel"
+                  value={channel.value}
+                  checked={channel.value === "both"}
+                  required
+                />
+                <span>{channel.label}</span>
+              </label>
+            ))}
+          </div>
+        </fieldset>
+        <input type="hidden" name="campaign" value="black-friday-acre" />
+        {privacyUrl && (
+          <a class="signup-black-friday_privacy" href={privacyUrl}>
+            Leia a política de privacidade ↗
+          </a>
+        )}
+        <button
+          class="button_wrap signup-black-friday_submit"
+          type="submit"
+          disabled
+        >
+          Cadastrar para receber a oferta <span aria-hidden="true">↗</span>
+        </button>
+      </Form>
+      <p class="signup-black-friday_note">
+        O cadastro não é uma contratação e não concede os bônus automaticamente.
+        As condições serão apresentadas com a oferta.
+      </p>
+      <noscript>
+        Ative o JavaScript para abrir o formulário e enviar o cadastro.
+      </noscript>
+    </div>
+  </Modal>
+)}
+{render && (
+  <Modal id="cadastro-info" label="Sobre o cadastro">
+    <ContentWrapper>
+      <Heading tag="h2" variant="h4">
+        Sobre o cadastro
+      </Heading>
+      <Paragraph variant="small">
+        Esta lista é destinada à revelação da oferta de Black Friday do A.C.R.E.
+        Cadastrar-se não é contratar nem receber automaticamente os bônus.
+      </Paragraph>
+      <Paragraph variant="small">
+        {ready
+          ? "Consulte na política de privacidade como seus dados serão utilizados antes de se cadastrar."
+          : "A captação está desativada enquanto o destino dos dados não for configurado."}
+      </Paragraph>
+      {privacyUrl && (
+        <Button element="link" href={privacyUrl} emphasis="secondary">
+          Política de privacidade
+        </Button>
+      )}
+    </ContentWrapper>
+  </Modal>
+)}
+
+<script>
+  for (const input of document.querySelectorAll<HTMLInputElement>(
+    "[data-signup-whatsapp]",
+  )) {
+    const format = (value: string) => {
+      const digits = value.replace(/\D/g, "").slice(0, 11);
+      if (digits.length <= 2) return digits.length ? `(${digits}` : "";
+      const area = digits.slice(0, 2);
+      const number = digits.slice(2);
+      const split = number.length > 8 ? 5 : 4;
+      return `(${area}) ${number.slice(0, split)}${number.length > split ? `-${number.slice(split)}` : ""}`;
+    };
+    const validate = () => {
+      const digits = input.value.replace(/\D/g, "");
+      const valid = digits.length === 10 || digits.length === 11;
+      input.setCustomValidity(
+        input.value && !valid
+          ? "Informe o número com DDD, com 10 ou 11 dígitos."
+          : "",
+      );
+    };
+    input.addEventListener("input", () => {
+      const cursor = input.selectionStart ?? input.value.length;
+      const digitsBeforeCursor = input.value
+        .slice(0, cursor)
+        .replace(/\D/g, "").length;
+      input.value = format(input.value);
+      if (digitsBeforeCursor > 0) {
+        let position = 0;
+        let digitsSeen = 0;
+        while (
+          position < input.value.length &&
+          digitsSeen < digitsBeforeCursor
+        ) {
+          if (/\d/.test(input.value[position])) digitsSeen++;
+          position++;
+        }
+        input.setSelectionRange(position, position);
+      }
+      validate();
+    });
+    input.addEventListener("change", validate);
+  }
+</script>
+
+<style is:global>
+  @layer components {
+    .signup-black-friday_wrap {
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+      .signup-black-friday_channels {
+        min-inline-size: 0;
+        border: 0;
+        padding: 0;
+        margin: 0;
+      }
+      .signup-black-friday_legend {
+        margin-bottom: 0.5rem;
+      }
+      .signup-black-friday_options {
+        display: flex;
+        flex-wrap: nowrap;
+        gap: 0.5rem;
+        max-width: 100%;
+        overflow-x: auto;
+        padding: 0.25rem;
+      }
+      .signup-black-friday_option {
+        display: inline-flex;
+        align-items: center;
+        flex: 0 0 auto;
+        gap: 0.4em;
+        padding: 0.55em 0.75em;
+        border: var(--border-width) solid var(--border);
+        border-radius: var(--radius-round);
+        font-size: 0.8125rem;
+        white-space: nowrap;
+        cursor: pointer;
+        & input {
+          appearance: auto;
+          width: 1em;
+          height: 1em;
+          margin: 0;
+          accent-color: var(--dark-900);
+        }
+        &:has(:checked) {
+          background: var(--brand-500);
+          border-color: var(--brand-500);
+          color: var(--dark-900);
+          font-weight: 600;
+        }
+        &:has(:focus-visible) {
+          outline: var(--focus-width) solid var(--text);
+          outline-offset: var(--focus-offset);
+        }
+      }
+      .signup-black-friday_submit {
+        width: 100%;
+        min-width: 0;
+        min-height: 3.5rem;
+        padding: 1em;
+        font-size: 1.0625rem;
+        font-weight: 600;
+        white-space: normal;
+      }
+      .signup-black-friday_note {
+        color: var(--text-2);
+        font-size: 0.75rem;
+        line-height: 1.7;
+      }
+      .signup-black-friday_privacy {
+        font-size: 0.8125rem;
+        text-decoration: underline;
+        text-underline-offset: 0.2em;
+      }
+    }
+  }
+</style>

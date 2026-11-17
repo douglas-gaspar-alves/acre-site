@@ -52,6 +52,7 @@ if (import.meta.env.DEV && render && content && !id) {
         class="modal_close"
         variant="close"
         emphasis="secondary"
+        label="Fechar"
         data-modal-close
       />
       <div class="modal_scroll" data-modal-scroll>
@@ -70,11 +71,33 @@ if (import.meta.env.DEV && render && content && !id) {
     const scroll = modal.querySelector<HTMLElement>("[data-modal-scroll]");
 
     const open = () => {
+      modal.classList.remove("dismissed");
       if (modal.open) return;
       if (scroll) scroll.scrollTop = 0;
       modal.showModal();
       modal.dispatchEvent(new CustomEvent("modal-open", { bubbles: true }));
     };
+
+    const close = () => {
+      modal.classList.add("dismissed");
+      modal.classList.remove("stacki-opened");
+      modal.classList.remove("preview");
+      if (modal.open) modal.close();
+      else
+        modal.dispatchEvent(new CustomEvent("modal-close", { bubbles: true }));
+    };
+
+    const closeButton = modal.querySelector("[data-modal-close]");
+    closeButton?.addEventListener("pointerdown", (event) => {
+      event.preventDefault();
+      event.stopPropagation();
+      close();
+    });
+    closeButton?.addEventListener("click", (event) => {
+      event.preventDefault();
+      event.stopPropagation();
+      if (!modal.classList.contains("dismissed")) close();
+    });
 
     modal.addEventListener("close", () =>
       modal.dispatchEvent(new CustomEvent("modal-close", { bubbles: true })),
@@ -89,8 +112,7 @@ if (import.meta.env.DEV && render && content && !id) {
     modal.addEventListener("click", (event) => {
       const target = event.target;
       if (!(target instanceof Element)) return;
-      if (target.closest("[data-modal-close]")) modal.close();
-      else if (fromBackdrop && target === modal) modal.close();
+      if (fromBackdrop && target === modal) close();
       fromBackdrop = false;
     });
 
@@ -138,6 +160,9 @@ if (import.meta.env.DEV && render && content && !id) {
       border: 0;
       color: var(--text);
       overflow: clip;
+      &.dismissed {
+        display: none !important;
+      }
       transition:
         display var(--_leaving) allow-discrete,
         overlay var(--_leaving) allow-discrete;

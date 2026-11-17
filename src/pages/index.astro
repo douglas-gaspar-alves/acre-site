@@ -1,41 +1,27 @@
 ---
-import Layout from "@/layouts/BaseLayout.astro";
+import Layout from "@/layouts/CampaignLayout.astro";
 import Section from "@/components/wrapper/Section.astro";
-import Heading from "@/components/typography/Heading.astro";
-import Eyebrow from "@/components/typography/Eyebrow.astro";
-import Img from "@/components/media/Img.astro";
-import lumos_background from "@/assets/graphics/lumos-background.svg";
-import Icon from "@/components/media/Icon.astro";
-import logo_icon from "@/assets/logo/logo-icon.svg";
 import ContentWrapper from "@/components/wrapper/ContentWrapper.astro";
+import HeroBlackFriday from "@/components/content/HeroBlackFriday.astro";
+import SignupBlackFriday from "@/components/content/SignupBlackFriday.astro";
 ---
 
-<Layout theme="dark">
+<Layout
+  title="Black Friday"
+  description="Contrate um gerente e leve uma agência completa. Cadastre-se para conhecer a oferta A.C.R.E. e dois bônus exclusivos da Black Friday. Revelação na quinta-feira."
+  noindex
+>
+  <!-- Black Friday -->
   <Section
-    paddingBottom="even"
-    containerClass="flex-grow"
-    paddingTop="even"
-    class="flex-grow"
-    style="min-height: calc(100svh - var(--nav-height));"
+    paddingTop="small"
+    paddingBottom="small"
+    class="flex-grow background-transparent"
+    aria-labelledby="oferta-title"
   >
-    <ContentWrapper
-      class="flex-grow theme-brand"
-      variant="card"
-      mediaOpacity={100}
-    >
-      <Icon src={logo_icon} variant="large" />
-      <Heading variant="display" tag="h1" class="margin-block-8">
-        Style Guide
-      </Heading>
-      <Eyebrow variant="tag">v1.0.4</Eyebrow>
-      <Img
-        slot="column2"
-        src={lumos_background}
-        width={1920}
-        height={1080}
-        loading="eager"
-        fetchPriority="high"
-      />
+    <ContentWrapper centered>
+      <HeroBlackFriday />
     </ContentWrapper>
   </Section>
+  <SignupBlackFriday />
 </Layout>
+<SignupBlackFriday />

@@ -1,13 +1,21 @@
+@font-face {
+  font-family: "Metrophobic";
+  src: url("/brand/metrophobic-regular.ttf") format("truetype");
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+}
+
 /* Design tokens */
 :root {
   /* Swatches */
   --light-100: #ffffff;
   --light-200: #ebebeb;
   --light-300: #d9d9d9;
-  --dark-700: #453e42;
-  --dark-800: #2f2b2d;
-  --dark-900: #1f1d1e;
-  --brand-500: #c6fb50;
+  --dark-700: #30352d;
+  --dark-800: #1a1e18;
+  --dark-900: #101210;
+  --brand-500: #3ff400;
   --brand-text: var(--dark-900);
 
   /* Typography primitives */
@@ -78,8 +86,8 @@
   --h1-text-transform: none;
   --h1-margin-top: var(--space-7);
   --h1-margin-bottom: var(--space-6);
-  --h1-font-family: var(--primary-family);
-  --h1-font-weight: var(--primary-medium);
+  --h1-font-family: "Metrophobic", var(--primary-family);
+  --h1-font-weight: 400;
   --h1-text-wrap: balance;
 
   --h2: clamp(var(--h2-min) / 16 * 1rem, ((var(--h2-min) - ((var(--h2-max) - var(--h2-min)) / (var(--viewport-max) - var(--viewport-min)) * var(--viewport-min))) / 16 * 1rem + ((var(--h2-max) - var(--h2-min)) / (var(--viewport-max) - var(--viewport-min))) * 100vw), var(--h2-max) / 16 * 1rem);
@@ -114,8 +122,8 @@
   --h4-text-transform: none;
   --h4-margin-top: var(--space-6);
   --h4-margin-bottom: var(--space-4);
-  --h4-font-family: var(--primary-family);
-  --h4-font-weight: var(--primary-medium);
+  --h4-font-family: "Metrophobic", var(--primary-family);
+  --h4-font-weight: 400;
   --h4-text-wrap: balance;
 
   --h5: clamp(var(--h5-min) / 16 * 1rem, ((var(--h5-min) - ((var(--h5-max) - var(--h5-min)) / (var(--viewport-max) - var(--viewport-min)) * var(--viewport-min))) / 16 * 1rem + ((var(--h5-max) - var(--h5-min)) / (var(--viewport-max) - var(--viewport-min))) * 100vw), var(--h5-max) / 16 * 1rem);
@@ -613,6 +621,6 @@ h4,
 h5,
 h6,
 p,
-[class*="text-style-"] {
+[class*="text-style-"]:not(input, textarea, select) {
   text-box: trim-both cap alphabetic;
 }
