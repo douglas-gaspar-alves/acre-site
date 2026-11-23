@@ -7,7 +7,7 @@ Home em `/`, construída com Astro e Lumos. A página inicial do starter foi pre
 1. Confirmar a quinta-feira, horário, condições da oferta, bônus e alcance de “agência completa”.
 2. Preparar a entrega por WhatsApp e e-mail, respeitando a preferência informada no cadastro.
 3. Publicar a política de privacidade e configurar `PUBLIC_PRIVACY_URL`.
-4. O endpoint padrão é `https://webhook.douglasgaspar.com/webhook/backfriday-acre`. `PUBLIC_LEAD_ENDPOINT` pode substituí-lo em outro ambiente. Não colocar tokens ou credenciais nessa variável.
+4. O endpoint padrão é `https://acre.apps.n8nitro.com/webhook-test/backfriday-acre`. `PUBLIC_LEAD_ENDPOINT` pode substituí-lo em outro ambiente. Não colocar tokens ou credenciais nessa variável.
 5. Fazer novo build após alterar as variáveis. A página é estática.
 
 O endpoint recebe `POST` multipart/FormData com:
